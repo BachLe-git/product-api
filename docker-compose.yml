@@ -1,0 +1,23 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: nammongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  product-api:
+    build: .
+    container_name: product-api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo_data:
