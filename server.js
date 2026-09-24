@@ -17,6 +17,20 @@ app.get('/', (req, res) => {
     });
 });
 
+app.get('/health', (req, res) => {
+    if (mongoose.connection.readyState === 1) {
+        return res.status(200).json({
+            status: 'UP',
+            mongodb: 'CONNECTED'
+        });
+    }
+
+    res.status(503).json({
+        status: 'DOWN',
+        mongodb: 'DISCONNECTED'
+    });
+});
+
 app.use('/api/products', productRoutes);
 
 async function startServer() {
