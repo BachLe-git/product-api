@@ -82,6 +82,27 @@ jobs:
           cat product-api.log
           exit 1
 
+      - name: Healthcheck Product API
+        run: |
+          for i in {1..30}; do
+            response=$(curl --silent --write-out "%{http_code}" \
+              --output health-response.json \
+              http://127.0.0.1:3000/health)
+
+            if [ "$response" = "200" ]; then
+              echo "Product API healthcheck passed"
+              cat health-response.json
+              exit 0
+            fi
+
+            echo "Waiting for Product API..."
+            sleep 2
+          done
+
+          echo "Product API healthcheck failed"
+          cat product-api.log
+          exit 1
+
       - name: Test POST - Create Product
         run: |
           response=$(curl --fail --silent \
