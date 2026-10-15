@@ -27,9 +27,9 @@ jobs:
 
       - name: Check JavaScript syntax
         run: |
-          node --check server.js
-          node --check routes/products.js
-          node --check models/Product.js
+          node --check src/server.js
+          node --check src/routes/products.js
+          node --check src/models/Product.js
 
       - name: Build Docker image
         run: docker build -t product-api:ci .
